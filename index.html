@@ -1,174 +1,501 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DRIPXEL — AI Content & Crypto Marketing</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #020408;
-    --surface: #060d14;
-    --surface2: #0a1520;
-    --blue: #00d4ff;
-    --yellow: #f5e642;
-    --orange: #ff8c00;
-    --text: #e8f4ff;
-    --muted: #4a7a9b;
-    --grid: rgba(0,212,255,0.04);
-  }
-  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-  html { scroll-behavior:smooth; }
-  body {
-    background:var(--bg); color:var(--text);
-    font-family:'Rajdhani',sans-serif;
-    overflow-x:hidden; cursor:none;
-  }
-  body::after {
-    content:''; position:fixed; inset:0;
-    background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,212,255,0.012) 2px,rgba(0,212,255,0.012) 4px);
-    pointer-events:none; z-index:9000;
-  }
-  body::before {
-    content:''; position:fixed; inset:0;
-    background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
-    background-size:40px 40px; pointer-events:none; z-index:0;
-  }
-  .cursor { width:8px;height:8px;background:var(--yellow);position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%); }
-  .cursor-ring { width:30px;height:30px;border:1px solid var(--blue);position:fixed;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all 0.12s ease;clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%); }
+/* ═══════════════════════════════════════
+   VARIABLES
+═══════════════════════════════════════ */
+:root {
+  --bg: #03050a;
+  --surface: #070e18;
+  --surface2: #0c1828;
+  --card: #080f1a;
+  --blue: #00c8ff;
+  --blue-dim: rgba(0,200,255,0.12);
+  --yellow: #f0dc00;
+  --yellow-dim: rgba(240,220,0,0.1);
+  --cyan: #00ffcc;
+  --pink: #ff2d78;
+  --text: #ddeeff;
+  --text2: #8aaccc;
+  --border: rgba(0,200,255,0.12);
+  --border-y: rgba(240,220,0,0.15);
+  --glow-b: 0 0 20px rgba(0,200,255,0.25);
+  --glow-y: 0 0 20px rgba(240,220,0,0.3);
+}
+[data-theme="light"] {
+  --bg: #eef3f8;
+  --surface: #e2eaf3;
+  --surface2: #d5e0ec;
+  --card: #e8eff7;
+  --blue: #0077bb;
+  --blue-dim: rgba(0,119,187,0.1);
+  --yellow: #a07800;
+  --yellow-dim: rgba(160,120,0,0.08);
+  --cyan: #00998a;
+  --pink: #cc1a5f;
+  --text: #0a1824;
+  --text2: #3a5a7a;
+  --border: rgba(0,119,187,0.15);
+  --border-y: rgba(160,120,0,0.18);
+  --glow-b: 0 2px 12px rgba(0,119,187,0.15);
+  --glow-y: 0 2px 12px rgba(160,120,0,0.15);
+}
 
-  /* NAV */
-  nav { position:fixed;top:0;left:0;right:0;z-index:500;padding:1.2rem 3rem;display:flex;justify-content:space-between;align-items:center;background:rgba(2,4,8,0.93);border-bottom:1px solid rgba(0,212,255,0.1);backdrop-filter:blur(12px); }
-  .nav-logo { font-family:'Orbitron',monospace;font-size:1.4rem;font-weight:900;letter-spacing:6px;color:var(--blue);text-shadow:0 0 20px rgba(0,212,255,0.7),0 0 40px rgba(0,212,255,0.3); }
-  .nav-links { display:flex;gap:2.5rem;list-style:none; }
-  .nav-links a { font-family:'Share Tech Mono',monospace;font-size:0.68rem;letter-spacing:3px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.2s,text-shadow 0.2s; }
-  .nav-links a::before { content:'// ';opacity:0.4; }
-  .nav-links a:hover { color:var(--blue);text-shadow:0 0 10px rgba(0,212,255,0.6); }
+/* ═══════════════════════════════════════
+   BASE
+═══════════════════════════════════════ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Rajdhani', sans-serif;
+  overflow-x: hidden;
+  cursor: none;
+  transition: background 0.4s, color 0.4s;
+}
 
-  /* HERO */
-  .hero { min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:8rem 3rem 6rem;position:relative;overflow:hidden; }
-  .hero::before { content:'';position:absolute;width:700px;height:700px;background:radial-gradient(circle,rgba(0,212,255,0.07) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none; }
-  .hcorner { position:absolute;width:100px;height:100px;border-color:rgba(0,212,255,0.25);border-style:solid; }
-  .hc-tl{top:5.5rem;left:2rem;border-width:2px 0 0 2px;}
-  .hc-tr{top:5.5rem;right:2rem;border-width:2px 2px 0 0;}
-  .hc-bl{bottom:3.5rem;left:2rem;border-width:0 0 2px 2px;}
-  .hc-br{bottom:3.5rem;right:2rem;border-width:0 2px 2px 0;}
-  .hero-content { position:relative;z-index:2; }
-  .hero-tag { display:inline-flex;align-items:center;gap:10px;font-family:'Share Tech Mono',monospace;font-size:0.65rem;letter-spacing:3px;color:var(--yellow);border:1px solid rgba(245,230,66,0.25);padding:6px 18px;margin-bottom:2.5rem;background:rgba(245,230,66,0.04);animation:fadeUp 0.6s ease both; }
-  .blink { width:6px;height:6px;background:var(--yellow);display:inline-block;animation:blink 1s step-end infinite; }
-  @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-  .hero-name { font-family:'Orbitron',monospace;font-size:clamp(4rem,13vw,10rem);font-weight:900;line-height:0.92;letter-spacing:8px;animation:fadeUp 0.6s 0.1s ease both; }
-  .n-drip { display:block;color:var(--text);text-shadow:0 0 30px rgba(0,212,255,0.4),0 0 60px rgba(0,212,255,0.15); }
-  .n-xel { display:block;color:var(--yellow);text-shadow:0 0 30px rgba(245,230,66,0.7),0 0 60px rgba(245,230,66,0.3); }
-  .hero-sub { font-size:clamp(0.9rem,2vw,1.15rem);font-weight:500;color:var(--muted);margin:2rem auto 2.5rem;max-width:560px;line-height:1.75;letter-spacing:0.3px;animation:fadeUp 0.6s 0.2s ease both; }
-  .hero-sub .hb{color:var(--blue);font-weight:700;}
-  .hero-sub .hy{color:var(--yellow);font-weight:700;}
-  .hero-btns { display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;animation:fadeUp 0.6s 0.3s ease both; }
+/* Scanlines — dark only */
+[data-theme="dark"] body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background: repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,200,255,0.01) 3px,rgba(0,200,255,0.01) 4px);
+  pointer-events: none; z-index: 8000;
+}
 
-  /* BUTTONS */
-  .btn { font-family:'Share Tech Mono',monospace;font-size:0.72rem;letter-spacing:3px;text-transform:uppercase;padding:13px 30px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);transition:all 0.2s; }
-  .btn-y { background:var(--yellow);color:#000;font-weight:700; }
-  .btn-y:hover { background:#fff;box-shadow:0 0 25px rgba(245,230,66,0.5);transform:translateY(-2px); }
-  .btn-b { background:transparent;color:var(--blue);border:1px solid rgba(0,212,255,0.4); }
-  .btn-b:hover { background:rgba(0,212,255,0.07);box-shadow:0 0 18px rgba(0,212,255,0.25);transform:translateY(-2px); }
+/* Grid */
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 44px 44px;
+  pointer-events: none; z-index: 0;
+  opacity: 0.6;
+}
 
-  /* STATS BAR */
-  .hero-stats { display:flex;gap:0;justify-content:center;margin-top:3.5rem;border:1px solid rgba(0,212,255,0.12);position:relative;animation:fadeUp 0.6s 0.4s ease both; }
-  .hero-stats::before { content:'STATUS_OK';position:absolute;top:-9px;left:16px;font-family:'Share Tech Mono',monospace;font-size:0.55rem;letter-spacing:2px;color:var(--blue);background:var(--bg);padding:0 8px; }
-  .hst { padding:1.4rem 2.2rem;border-right:1px solid rgba(0,212,255,0.08);text-align:center; }
-  .hst:last-child{border-right:none;}
-  .hst-v { font-family:'Orbitron',monospace;font-size:1.5rem;font-weight:700;color:var(--yellow);display:block;text-shadow:0 0 12px rgba(245,230,66,0.4); }
-  .hst-l { font-family:'Share Tech Mono',monospace;font-size:0.55rem;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-top:3px;display:block; }
+/* Cursor */
+.cursor { width:8px;height:8px;background:var(--yellow);position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);transition:transform 0.1s; }
+.cursor-ring { width:28px;height:28px;border:1px solid var(--blue);border-radius:50%;position:fixed;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all 0.14s ease; }
 
-  /* TICKER */
-  .ticker { overflow:hidden;background:var(--yellow);padding:0.55rem 0; }
-  .ticker-inner { display:flex;animation:tick 22s linear infinite;white-space:nowrap; }
-  .ti { font-family:'Orbitron',monospace;font-size:0.6rem;font-weight:700;letter-spacing:4px;color:#000;padding:0 2rem; }
-  .ts { color:rgba(0,0,0,0.3); }
-  @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+/* ═══════════════════════════════════════
+   NAV
+═══════════════════════════════════════ */
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:600;
+  padding: 0 3rem;
+  height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(3,5,10,0.92);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(16px);
+  transition: background 0.4s;
+}
+[data-theme="light"] nav { background: rgba(238,243,248,0.92); }
 
-  /* SECTIONS */
-  .section { padding:7rem 3rem;position:relative;z-index:1; }
-  .eyebrow { font-family:'Share Tech Mono',monospace;font-size:0.62rem;letter-spacing:4px;color:var(--blue);text-transform:uppercase;margin-bottom:0.8rem;display:flex;align-items:center;gap:10px; }
-  .eyebrow::before { content:'';display:inline-block;width:28px;height:1px;background:var(--blue); }
-  .stitle { font-family:'Orbitron',monospace;font-size:clamp(1.8rem,4.5vw,3.8rem);font-weight:900;letter-spacing:4px;color:var(--text);line-height:1;margin-bottom:1rem; }
-  .ssub { color:var(--muted);font-size:1rem;line-height:1.7;max-width:460px;margin-bottom:4rem;font-weight:500; }
+.nav-logo {
+  font-family: 'Orbitron', monospace;
+  font-size: 1.25rem; font-weight: 900; letter-spacing: 5px;
+  color: var(--blue);
+  text-shadow: var(--glow-b);
+  position: relative;
+  text-decoration: none;
+}
 
-  /* SERVICES */
-  .svc-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.08); }
-  .svc-card { background:var(--bg);padding:2.5rem;position:relative;overflow:hidden;transition:background 0.3s; }
-  .svc-card::before { content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--yellow));transform:scaleX(0);transform-origin:left;transition:transform 0.4s; }
-  .svc-card:hover::before{transform:scaleX(1);}
-  .svc-card:hover{background:var(--surface);}
-  .svc-n { font-family:'Orbitron',monospace;font-size:3.5rem;font-weight:900;color:rgba(0,212,255,0.04);position:absolute;top:1rem;right:1.5rem;line-height:1;transition:color 0.3s; }
-  .svc-card:hover .svc-n{color:rgba(0,212,255,0.09);}
-  .svc-ico { width:46px;height:46px;border:1px solid rgba(0,212,255,0.25);display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:1.4rem;background:rgba(0,212,255,0.04);clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px)); }
-  .svc-t { font-family:'Orbitron',monospace;font-size:0.78rem;font-weight:700;letter-spacing:2px;color:var(--text);margin-bottom:0.8rem; }
-  .svc-d { font-size:0.9rem;line-height:1.7;color:var(--muted);font-weight:500; }
-  .svc-tags { margin-top:1.5rem;display:flex;flex-wrap:wrap;gap:5px; }
-  .svc-tag { font-family:'Share Tech Mono',monospace;font-size:0.58rem;letter-spacing:2px;padding:4px 10px;background:rgba(245,230,66,0.05);border:1px solid rgba(245,230,66,0.18);color:var(--yellow); }
+.nav-center { display:flex; gap:0; list-style:none; }
+.nav-center li a, .nav-center li button {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--text2); text-decoration: none;
+  padding: 0 1.2rem; height: 60px;
+  display: flex; align-items: center;
+  border: none; background: none; cursor: pointer;
+  transition: color 0.2s, background 0.2s;
+  position: relative;
+}
+.nav-center li a::after {
+  content:''; position:absolute; bottom:0; left:1.2rem; right:1.2rem;
+  height:2px; background:var(--yellow); transform:scaleX(0); transition:transform 0.2s;
+}
+.nav-center li a:hover { color:var(--text); background:var(--blue-dim); }
+.nav-center li a:hover::after { transform:scaleX(1); }
+.nav-center li button:hover { color:var(--blue); }
 
-  /* ABOUT */
-  .about-grid { display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center; }
-  .about-panel { border:1px solid rgba(0,212,255,0.13);padding:2.5rem;position:relative;background:var(--surface); }
-  .about-panel::before { content:'PROFILE.SYS';position:absolute;top:-9px;left:14px;font-family:'Share Tech Mono',monospace;font-size:0.55rem;letter-spacing:2px;color:var(--blue);background:var(--surface);padding:0 8px; }
-  .about-panel::after { content:'';position:absolute;bottom:-6px;right:-6px;width:36px;height:36px;border-right:2px solid var(--yellow);border-bottom:2px solid var(--yellow); }
-  .a-handle { font-family:'Orbitron',monospace;font-size:2rem;font-weight:900;color:var(--blue);text-shadow:0 0 18px rgba(0,212,255,0.4);letter-spacing:3px;margin-bottom:0.4rem; }
-  .a-stat { font-family:'Share Tech Mono',monospace;font-size:0.62rem;letter-spacing:3px;color:var(--muted);margin-bottom:1.5rem; }
-  .a-stat span{color:var(--yellow);}
-  .a-bio { font-size:0.9rem;color:var(--muted);line-height:1.75;border-left:2px solid rgba(0,212,255,0.25);padding-left:1rem;margin-bottom:1.5rem;font-weight:500; }
-  .chips { display:flex;flex-wrap:wrap;gap:5px; }
-  .chip { font-family:'Share Tech Mono',monospace;font-size:0.58rem;letter-spacing:2px;padding:4px 11px;text-transform:uppercase; }
-  .cb{background:rgba(0,212,255,0.05);border:1px solid rgba(0,212,255,0.2);color:var(--blue);}
-  .cy{background:rgba(245,230,66,0.05);border:1px solid rgba(245,230,66,0.2);color:var(--yellow);}
-  .co{background:rgba(255,140,0,0.05);border:1px solid rgba(255,140,0,0.2);color:var(--orange);}
+.nav-right { display:flex; align-items:center; gap:0.8rem; }
 
-  /* PROCESS */
-  .proc-row { display:grid;grid-template-columns:repeat(4,1fr);position:relative; }
-  .proc-row::before { content:'';position:absolute;top:32px;left:12%;right:12%;height:1px;background:linear-gradient(90deg,transparent,var(--blue),var(--yellow),var(--blue),transparent);opacity:0.25; }
-  .proc-step { padding:2rem 1.5rem;text-align:center; }
-  .proc-dot { width:14px;height:14px;background:var(--yellow);clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);margin:0 auto 1.4rem;box-shadow:0 0 12px rgba(245,230,66,0.4); }
-  .proc-n { font-family:'Share Tech Mono',monospace;font-size:0.58rem;letter-spacing:3px;color:var(--blue);margin-bottom:0.5rem;display:block; }
-  .proc-t { font-family:'Orbitron',monospace;font-size:0.7rem;font-weight:700;letter-spacing:2px;color:var(--text);margin-bottom:0.6rem; }
-  .proc-d { font-size:0.85rem;color:var(--muted);line-height:1.6; }
+.theme-btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 2px;
+  color: var(--text2); background: none;
+  border: 1px solid var(--border); padding: 5px 12px;
+  cursor: pointer; transition: all 0.2s;
+  display: flex; align-items: center; gap: 5px;
+}
+.theme-btn:hover { color:var(--blue); border-color:var(--blue); box-shadow:var(--glow-b); }
 
-  /* CTA */
-  .cta-sec { text-align:center;padding:7rem 3rem;position:relative;overflow:hidden;z-index:1; }
-  .cta-sec::before { content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 50%,rgba(0,212,255,0.05) 0%,transparent 70%);pointer-events:none; }
-  .cta-sec .eyebrow { justify-content:center; }
-  .contact-cards { display:flex;gap:1px;justify-content:center;max-width:460px;margin:3rem auto 0;border:1px solid rgba(0,212,255,0.1); }
-  .cc { flex:1;min-width:160px;padding:2rem 1.2rem;background:var(--surface);text-align:center;text-decoration:none;display:block;transition:background 0.3s; }
-  .cc:hover{background:var(--surface2);}
-  .cc-icon { font-size:1.4rem;margin-bottom:0.4rem;display:block; }
-  .cc-lbl { font-family:'Share Tech Mono',monospace;font-size:0.55rem;letter-spacing:2px;color:var(--muted);display:block;margin-bottom:0.4rem; }
-  .cc-val { font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:1px;color:var(--blue);display:block; }
-  .cc:hover .cc-val{color:var(--yellow);}
+/* ═══════════════════════════════════════
+   HERO
+═══════════════════════════════════════ */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align: center;
+  padding: 7rem 3rem 5rem;
+  position: relative; overflow: hidden;
+  z-index: 1;
+}
 
-  /* FOOTER */
-  footer { padding:2rem 3rem;border-top:1px solid rgba(0,212,255,0.08);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;background:var(--surface);position:relative;z-index:1; }
-  .f-logo { font-family:'Orbitron',monospace;font-size:0.95rem;font-weight:900;letter-spacing:5px;color:var(--blue);text-shadow:0 0 10px rgba(0,212,255,0.4); }
-  .f-copy { font-family:'Share Tech Mono',monospace;font-size:0.58rem;letter-spacing:2px;color:var(--muted); }
-  .f-x { font-family:'Share Tech Mono',monospace;font-size:0.62rem;letter-spacing:2px;color:var(--yellow);text-decoration:none;border:1px solid rgba(245,230,66,0.18);padding:6px 14px;transition:all 0.2s; }
-  .f-x:hover{background:rgba(245,230,66,0.05);box-shadow:0 0 10px rgba(245,230,66,0.15);}
+/* Radial glow */
+.hero-glow {
+  position: absolute; width:800px; height:800px;
+  background: radial-gradient(circle at center,rgba(0,200,255,0.06) 0%,transparent 65%);
+  top:50%; left:50%; transform:translate(-50%,-50%);
+  pointer-events:none;
+  animation: pulseGlow 5s ease-in-out infinite;
+}
+@keyframes pulseGlow { 0%,100%{opacity:0.6} 50%{opacity:1} }
 
-  @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-  .reveal{opacity:0;transform:translateY(22px);transition:opacity 0.6s ease,transform 0.6s ease;}
-  .reveal.visible{opacity:1;transform:none;}
+/* Corner brackets */
+.corner { position:absolute; width:80px; height:80px; border-color:rgba(0,200,255,0.2); border-style:solid; }
+.c-tl{top:5rem;left:2rem;border-width:1.5px 0 0 1.5px;}
+.c-tr{top:5rem;right:2rem;border-width:1.5px 1.5px 0 0;}
+.c-bl{bottom:3rem;left:2rem;border-width:0 0 1.5px 1.5px;}
+.c-br{bottom:3rem;right:2rem;border-width:0 1.5px 1.5px 0;}
 
-  @media(max-width:768px){
-    nav{padding:1rem 1.5rem;}
-    .nav-links{display:none;}
-    .hero{padding:7rem 1.5rem 5rem;}
-    .hcorner{display:none;}
-    .hst{padding:1rem 1.2rem;}
-    .section{padding:5rem 1.5rem;}
-    .about-grid{grid-template-columns:1fr;gap:3rem;}
-    .proc-row{grid-template-columns:1fr 1fr;}
-    .proc-row::before{display:none;}
-    footer{flex-direction:column;text-align:center;padding:2rem 1.5rem;}
-    body{cursor:auto;}
-    .cursor,.cursor-ring{display:none;}
-  }
+/* Available tag */
+.avail-tag {
+  display: inline-flex; align-items:center; gap:8px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem; letter-spacing: 3px;
+  color: var(--cyan); border: 1px solid rgba(0,255,204,0.2);
+  padding: 5px 16px; margin-bottom: 2rem;
+  background: rgba(0,255,204,0.04);
+  animation: fadeUp 0.5s ease both;
+}
+.pulse-dot { width:5px;height:5px;background:var(--cyan);border-radius:50%;animation:pulseDot 1.4s ease-in-out infinite; }
+@keyframes pulseDot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.6);opacity:0.5}}
+
+/* HERO NAME — glitch */
+.hero-name {
+  font-family: 'Orbitron', monospace;
+  font-size: clamp(4.5rem, 14vw, 11rem);
+  font-weight: 900; letter-spacing: 8px;
+  line-height: 1;
+  animation: fadeUp 0.5s 0.08s ease both;
+  position: relative;
+  display: inline-block;
+  user-select: none;
+}
+.glyph {
+  display: inline-block;
+  position: relative;
+  transition: color 0.05s;
+}
+.glyph.is-drip { color: var(--text); text-shadow: 0 0 25px rgba(0,200,255,0.3); }
+.glyph.is-xel  { color: var(--yellow); text-shadow: 0 0 25px rgba(240,220,0,0.6), 0 0 50px rgba(240,220,0,0.2); }
+
+/* Glitch animation */
+@keyframes gFlash {
+  0%   { transform:translate(0,0); opacity:1; filter:none; }
+  15%  { transform:translate(-3px,1px) skewX(-10deg); color:#ff00ff; filter:blur(0.5px); }
+  30%  { transform:translate(3px,-1px) skewX(8deg); color:#00ffff; opacity:0.8; }
+  50%  { transform:translate(-2px,2px); color:var(--yellow); filter:none; }
+  70%  { transform:translate(2px,-1px) skewX(-4deg); opacity:0.9; }
+  100% { transform:translate(0,0); opacity:1; filter:none; }
+}
+.glyph.glitch { animation: gFlash 0.3s cubic-bezier(.25,.46,.45,.94); }
+
+/* Pseudo glitch bars */
+.hero-name::before, .hero-name::after {
+  content: attr(data-text);
+  position: absolute; top:0; left:0;
+  font-family: inherit; font-size: inherit; font-weight:inherit;
+  letter-spacing: inherit; line-height: inherit;
+  pointer-events: none; opacity: 0;
+}
+.hero-name.do-glitch::before {
+  color: #ff2d78;
+  clip-path: polygon(0 20%, 100% 20%, 100% 35%, 0 35%);
+  transform: translateX(-3px);
+  opacity: 0.7;
+  animation: scanBar1 0.3s ease forwards;
+}
+.hero-name.do-glitch::after {
+  color: #00ffcc;
+  clip-path: polygon(0 60%, 100% 60%, 100% 75%, 0 75%);
+  transform: translateX(3px);
+  opacity: 0.6;
+  animation: scanBar2 0.3s ease forwards;
+}
+@keyframes scanBar1 { 0%{opacity:0.7} 100%{opacity:0} }
+@keyframes scanBar2 { 0%{opacity:0.6} 100%{opacity:0} }
+
+.hero-sub {
+  font-size: clamp(0.9rem,1.8vw,1.1rem); font-weight:500;
+  color: var(--text2); max-width:540px; line-height:1.8; letter-spacing:0.3px;
+  margin: 1.8rem auto 2.2rem;
+  animation: fadeUp 0.5s 0.16s ease both;
+}
+.hl-b { color:var(--blue); font-weight:700; }
+.hl-y { color:var(--yellow); font-weight:700; }
+
+.hero-btns {
+  display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;
+  animation: fadeUp 0.5s 0.24s ease both;
+}
+
+/* ═══ BUTTONS ═══ */
+.btn {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.68rem; letter-spacing: 3px; text-transform:uppercase;
+  padding: 12px 28px; text-decoration:none;
+  display: inline-flex; align-items:center; gap:8px;
+  transition: all 0.2s; position:relative;
+  clip-path: polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+}
+.btn-y { background:var(--yellow); color:#000; font-weight:700; }
+.btn-y:hover { filter:brightness(1.15); transform:translateY(-2px); box-shadow:var(--glow-y); }
+.btn-b { background:transparent; color:var(--blue); border:1px solid rgba(0,200,255,0.35); }
+.btn-b:hover { background:var(--blue-dim); transform:translateY(-2px); box-shadow:var(--glow-b); }
+
+/* Stats */
+.hero-stats {
+  display:flex; margin-top:3rem; border:1px solid var(--border); position:relative;
+  animation: fadeUp 0.5s 0.32s ease both;
+}
+.hero-stats::before {
+  content:'STATUS_OK'; position:absolute; top:-9px; left:14px;
+  font-family:'Share Tech Mono',monospace; font-size:0.52rem; letter-spacing:2px;
+  color:var(--cyan); background:var(--bg); padding:0 8px;
+}
+.hs { padding:1.2rem 2rem; border-right:1px solid var(--border); text-align:center; }
+.hs:last-child{border-right:none;}
+.hs-v {
+  font-family:'Orbitron',monospace; font-size:1.4rem; font-weight:700;
+  color:var(--yellow); display:block;
+  text-shadow:var(--glow-y);
+}
+.hs-l { font-family:'Share Tech Mono',monospace; font-size:0.5rem; letter-spacing:2px; color:var(--text2); margin-top:2px; display:block; }
+/* Live follower shimmer */
+.hs-v.loading { animation:shimmer 1.2s infinite; }
+@keyframes shimmer { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+/* ═══════════════════════════════════════
+   TICKER
+═══════════════════════════════════════ */
+.ticker { overflow:hidden; background:var(--yellow); padding:0.5rem 0; }
+.ticker-inner { display:flex; animation:tickAnim 24s linear infinite; white-space:nowrap; }
+.ti { font-family:'Orbitron',monospace; font-size:0.58rem; font-weight:700; letter-spacing:4px; color:#000; padding:0 2rem; }
+.ts { color:rgba(0,0,0,0.25); }
+@keyframes tickAnim{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ═══════════════════════════════════════
+   SECTIONS
+═══════════════════════════════════════ */
+.section { padding:6rem 3rem; position:relative; z-index:1; }
+.sec-alt { background:var(--surface); }
+
+.eyebrow {
+  font-family:'Share Tech Mono',monospace; font-size:0.6rem; letter-spacing:4px;
+  color:var(--blue); text-transform:uppercase; margin-bottom:0.7rem;
+  display:flex; align-items:center; gap:10px;
+}
+.eyebrow::before { content:''; display:inline-block; width:24px; height:1px; background:var(--blue); }
+.stitle { font-family:'Orbitron',monospace; font-size:clamp(1.8rem,4vw,3.5rem); font-weight:900; letter-spacing:3px; color:var(--text); line-height:1; margin-bottom:0.9rem; }
+.ssub { color:var(--text2); font-size:0.95rem; line-height:1.75; max-width:460px; margin-bottom:3.5rem; font-weight:500; }
+
+/* ═══════════════════════════════════════
+   SERVICES — expandable cards
+═══════════════════════════════════════ */
+.svc-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1px; background:var(--border); border:1px solid var(--border); }
+
+.svc-card {
+  background:var(--card); padding:2.2rem; position:relative; overflow:hidden;
+  cursor:pointer; transition:background 0.3s;
+}
+.svc-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg,var(--blue),var(--yellow));
+  transform:scaleX(0); transform-origin:left; transition:transform 0.4s;
+}
+.svc-card:hover::before, .svc-card.open::before { transform:scaleX(1); }
+.svc-card:hover, .svc-card.open { background:var(--surface2); }
+
+.svc-n { font-family:'Orbitron',monospace; font-size:3rem; font-weight:900; color:var(--border); position:absolute; top:0.8rem; right:1.2rem; line-height:1; transition:color 0.3s; }
+.svc-card:hover .svc-n, .svc-card.open .svc-n { color:var(--blue-dim); }
+
+.svc-ico {
+  width:42px; height:42px; border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center; font-size:1.2rem;
+  margin-bottom:1.2rem; background:var(--blue-dim);
+  clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));
+}
+.svc-t { font-family:'Orbitron',monospace; font-size:0.75rem; font-weight:700; letter-spacing:2px; color:var(--text); margin-bottom:0.7rem; }
+.svc-d { font-size:0.88rem; line-height:1.7; color:var(--text2); font-weight:500; }
+.svc-tags { margin-top:1.2rem; display:flex; flex-wrap:wrap; gap:5px; }
+.svc-tag { font-family:'Share Tech Mono',monospace; font-size:0.56rem; letter-spacing:2px; padding:3px 9px; background:var(--yellow-dim); border:1px solid var(--border-y); color:var(--yellow); }
+
+/* Expandable details */
+.svc-expand {
+  max-height:0; overflow:hidden;
+  transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1), opacity 0.35s;
+  opacity:0;
+}
+.svc-card.open .svc-expand { max-height:400px; opacity:1; }
+.svc-expand-inner {
+  border-top:1px solid var(--border); margin-top:1.2rem; padding-top:1.2rem;
+}
+.expand-item {
+  display:flex; gap:10px; align-items:flex-start;
+  margin-bottom:0.8rem; font-size:0.85rem; color:var(--text2);
+}
+.expand-item::before { content:'▸'; color:var(--yellow); flex-shrink:0; margin-top:1px; }
+.svc-card-footer {
+  margin-top:1rem; display:flex; justify-content:space-between; align-items:center;
+  font-family:'Share Tech Mono',monospace; font-size:0.55rem; letter-spacing:2px; color:var(--blue);
+}
+.toggle-hint::after { content:' [+]'; }
+.svc-card.open .toggle-hint::after { content:' [−]'; }
+
+/* ═══════════════════════════════════════
+   ABOUT
+═══════════════════════════════════════ */
+.about-grid { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center; }
+
+.about-panel {
+  border:1px solid var(--border); padding:2.2rem; position:relative;
+  background:var(--card);
+}
+.about-panel::before {
+  content:'PROFILE.SYS'; position:absolute; top:-9px; left:14px;
+  font-family:'Share Tech Mono',monospace; font-size:0.52rem; letter-spacing:2px;
+  color:var(--blue); background:var(--card); padding:0 8px;
+}
+.about-panel::after {
+  content:''; position:absolute; bottom:-6px; right:-6px;
+  width:32px; height:32px; border-right:2px solid var(--yellow); border-bottom:2px solid var(--yellow);
+}
+.a-handle { font-family:'Orbitron',monospace; font-size:1.8rem; font-weight:900; color:var(--blue); text-shadow:var(--glow-b); letter-spacing:3px; margin-bottom:0.4rem; }
+.a-stat { font-family:'Share Tech Mono',monospace; font-size:0.6rem; letter-spacing:3px; color:var(--text2); margin-bottom:1.4rem; }
+.a-stat span { color:var(--yellow); }
+.a-bio { font-size:0.9rem; color:var(--text2); line-height:1.75; border-left:2px solid var(--blue-dim); border-color:var(--blue); padding-left:1rem; margin-bottom:1.4rem; }
+.chips { display:flex; flex-wrap:wrap; gap:5px; }
+.chip { font-family:'Share Tech Mono',monospace; font-size:0.56rem; letter-spacing:2px; padding:4px 10px; text-transform:uppercase; }
+.cb { background:var(--blue-dim); border:1px solid var(--border); color:var(--blue); }
+.cy { background:var(--yellow-dim); border:1px solid var(--border-y); color:var(--yellow); }
+.co { background:rgba(255,45,120,0.06); border:1px solid rgba(255,45,120,0.18); color:var(--pink); }
+
+/* ═══════════════════════════════════════
+   PROCESS
+═══════════════════════════════════════ */
+.proc-row { display:grid; grid-template-columns:repeat(4,1fr); position:relative; gap:1px; background:var(--border); border:1px solid var(--border); }
+.proc-step { padding:2rem 1.4rem; background:var(--card); text-align:center; }
+.proc-ico { font-size:1.6rem; margin-bottom:1rem; display:block; }
+.proc-n { font-family:'Share Tech Mono',monospace; font-size:0.55rem; letter-spacing:3px; color:var(--blue); margin-bottom:0.4rem; display:block; }
+.proc-t { font-family:'Orbitron',monospace; font-size:0.68rem; font-weight:700; letter-spacing:2px; color:var(--text); margin-bottom:0.5rem; }
+.proc-d { font-size:0.84rem; color:var(--text2); line-height:1.6; }
+
+/* ═══════════════════════════════════════
+   POSTS
+═══════════════════════════════════════ */
+.posts-featured { display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:var(--border); border:1px solid var(--border); margin-bottom:2.5rem; }
+.post-card {
+  background:var(--card); padding:1.8rem; text-decoration:none;
+  display:block; position:relative; overflow:hidden; transition:background 0.3s;
+}
+.post-card:hover { background:var(--surface2); }
+.post-card::before { content:''; position:absolute; top:0;left:0;right:0; height:2px; background:linear-gradient(90deg,var(--blue),var(--yellow)); }
+.post-tag { font-family:'Share Tech Mono',monospace; font-size:0.52rem; letter-spacing:3px; color:var(--blue); margin-bottom:0.8rem; display:block; }
+.post-ico { font-size:2rem; margin-bottom:0.8rem; display:block; }
+.post-t { font-family:'Orbitron',monospace; font-size:0.7rem; font-weight:700; letter-spacing:2px; color:var(--text); margin-bottom:0.4rem; }
+.post-d { font-size:0.82rem; color:var(--text2); line-height:1.6; margin-bottom:1rem; }
+.post-link { font-family:'Share Tech Mono',monospace; font-size:0.58rem; letter-spacing:2px; color:var(--yellow); display:flex; align-items:center; gap:5px; }
+
+/* Live feed */
+.live-feed-wrap {
+  border:1px solid var(--border); background:var(--card);
+  position:relative;
+}
+.live-feed-wrap::before {
+  content:'LIVE_FEED // @_DRIPXEL'; position:absolute; top:-9px; left:14px;
+  font-family:'Share Tech Mono',monospace; font-size:0.52rem; letter-spacing:2px;
+  color:var(--cyan); background:var(--card); padding:0 8px;
+}
+
+/* ═══════════════════════════════════════
+   CTA
+═══════════════════════════════════════ */
+.cta-sec { text-align:center; padding:7rem 3rem; position:relative; overflow:hidden; z-index:1; }
+.cta-glow { position:absolute; inset:0; background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(0,200,255,0.05) 0%,transparent 70%); pointer-events:none; }
+.cta-sec .eyebrow { justify-content:center; }
+.contact-row { display:flex; gap:1px; justify-content:center; max-width:440px; margin:2.5rem auto 0; background:var(--border); border:1px solid var(--border); }
+.cc { flex:1; min-width:140px; padding:1.8rem 1.2rem; background:var(--card); text-align:center; text-decoration:none; display:block; transition:background 0.2s; }
+.cc:hover { background:var(--surface2); }
+.cc-icon { font-size:1.3rem; margin-bottom:0.4rem; display:block; }
+.cc-lbl { font-family:'Share Tech Mono',monospace; font-size:0.52rem; letter-spacing:2px; color:var(--text2); display:block; margin-bottom:0.3rem; }
+.cc-val { font-family:'Share Tech Mono',monospace; font-size:0.68rem; letter-spacing:1px; color:var(--blue); display:block; }
+.cc:hover .cc-val { color:var(--yellow); }
+
+/* ═══════════════════════════════════════
+   COMING SOON MODAL
+═══════════════════════════════════════ */
+.modal-overlay {
+  position:fixed; inset:0; background:rgba(0,0,0,0.85);
+  z-index:2000; display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity 0.3s;
+  backdrop-filter:blur(4px);
+}
+.modal-overlay.show { opacity:1; pointer-events:all; }
+.modal-box {
+  background:var(--surface2); border:1px solid var(--border);
+  padding:3rem 4rem; text-align:center; position:relative;
+  max-width:460px; width:90%;
+}
+.modal-box::before { content:''; position:absolute; top:0;left:0;right:0; height:2px; background:linear-gradient(90deg,var(--blue),var(--yellow)); }
+.modal-box::after { content:''; position:absolute; bottom:-6px; right:-6px; width:32px; height:32px; border-right:2px solid var(--yellow); border-bottom:2px solid var(--yellow); }
+.modal-title { font-family:'Orbitron',monospace; font-size:1.4rem; font-weight:900; letter-spacing:4px; color:var(--yellow); text-shadow:var(--glow-y); margin-bottom:0.5rem; }
+.modal-sub { font-family:'Share Tech Mono',monospace; font-size:0.65rem; letter-spacing:3px; color:var(--text2); line-height:1.8; margin-bottom:2rem; }
+.modal-close { font-family:'Share Tech Mono',monospace; font-size:0.62rem; letter-spacing:2px; color:var(--text2); background:none; border:1px solid var(--border); padding:8px 20px; cursor:pointer; transition:all 0.2s; }
+.modal-close:hover { color:var(--blue); border-color:var(--blue); }
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+footer { padding:1.8rem 3rem; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; background:var(--surface); position:relative; z-index:1; }
+.f-logo { font-family:'Orbitron',monospace; font-size:0.9rem; font-weight:900; letter-spacing:5px; color:var(--blue); text-shadow:var(--glow-b); }
+.f-copy { font-family:'Share Tech Mono',monospace; font-size:0.55rem; letter-spacing:2px; color:var(--text2); }
+.f-x { font-family:'Share Tech Mono',monospace; font-size:0.6rem; letter-spacing:2px; color:var(--yellow); text-decoration:none; border:1px solid var(--border-y); padding:5px 14px; transition:all 0.2s; }
+.f-x:hover { background:var(--yellow-dim); box-shadow:var(--glow-y); }
+
+/* ═══════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════ */
+@keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+.reveal { opacity:0; transform:translateY(20px); transition:opacity 0.55s ease, transform 0.55s ease; }
+.reveal.visible { opacity:1; transform:none; }
+.reveal.d1{transition-delay:0.05s} .reveal.d2{transition-delay:0.12s} .reveal.d3{transition-delay:0.19s}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media(max-width:900px){
+  nav{padding:0 1.5rem;}
+  .nav-center{display:none;}
+  .hero{padding:7rem 1.5rem 5rem;}
+  .corner{display:none;}
+  .section{padding:4.5rem 1.5rem;}
+  .about-grid{grid-template-columns:1fr;gap:3rem;}
+  .proc-row{grid-template-columns:1fr 1fr;}
+  .posts-featured{grid-template-columns:1fr;}
+  footer{flex-direction:column;text-align:center;padding:1.5rem;}
+  body{cursor:auto;}
+  .cursor,.cursor-ring{display:none;}
+}
 </style>
 </head>
 <body>
@@ -176,42 +503,72 @@
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 
+<!-- COMING SOON MODAL -->
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <div class="modal-title">COMING SOON</div>
+    <div style="font-size:3rem;margin:1rem 0;">⚙️</div>
+    <div class="modal-sub">
+      AUTOMATION SCRIPTS &amp; TOOLS<br>
+      CURRENTLY IN DEVELOPMENT<br><br>
+      Stay tuned — this section will<br>showcase AI automation workflows.
+    </div>
+    <button class="modal-close" onclick="closeModal()">[ CLOSE ]</button>
+  </div>
+</div>
+
 <!-- NAV -->
 <nav>
-  <div class="nav-logo">DRIPXEL</div>
-  <ul class="nav-links">
+  <a class="nav-logo" href="#">DRIPXEL</a>
+  <ul class="nav-center">
     <li><a href="#services">Services</a></li>
     <li><a href="#about">About</a></li>
     <li><a href="#posts">Posts</a></li>
     <li><a href="#contact">Contact</a></li>
+    <li><button onclick="openModal()">Automation</button></li>
   </ul>
+  <div class="nav-right">
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">
+      <span id="themeIco">☀️</span><span id="themeTxt">LIGHT</span>
+    </button>
+  </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hcorner hc-tl"></div>
-  <div class="hcorner hc-tr"></div>
-  <div class="hcorner hc-bl"></div>
-  <div class="hcorner hc-br"></div>
-  <div class="hero-content">
-    <div class="hero-tag"><span class="blink"></span> AVAILABLE FOR PROJECTS</div>
-    <h1 class="hero-name">
-      <span class="n-drip">DRIP</span>
-      <span class="n-xel">XEL</span>
-    </h1>
-    <p class="hero-sub">
-      I build <span class="hb">AI-powered ads</span> that convert &amp; craft
-      <span class="hy">crypto marketing posts</span> that make projects go viral on X —
-      powered by <span class="hb">HiggsField AI</span>.
-    </p>
-    <div class="hero-btns">
-      <a href="#contact" class="btn btn-y">⚡ WORK WITH ME</a>
-      <a href="https://x.com/_Dripxel" target="_blank" class="btn btn-b">𝕏 @_DRIPXEL</a>
+  <div class="hero-glow"></div>
+  <div class="corner c-tl"></div><div class="corner c-tr"></div>
+  <div class="corner c-bl"></div><div class="corner c-br"></div>
+
+  <div class="avail-tag"><span class="pulse-dot"></span>AVAILABLE FOR PROJECTS</div>
+
+  <h1 class="hero-name" id="heroName" data-text="DRIPXEL">
+    <span class="glyph is-drip" data-l="D">D</span><span class="glyph is-drip" data-l="R">R</span><span class="glyph is-drip" data-l="I">I</span><span class="glyph is-drip" data-l="P">P</span><span class="glyph is-xel" data-l="X">X</span><span class="glyph is-xel" data-l="E">E</span><span class="glyph is-xel" data-l="L">L</span>
+  </h1>
+
+  <p class="hero-sub">
+    I build <span class="hl-b">AI-powered ads</span> that convert &amp; craft
+    <span class="hl-y">crypto marketing posts</span> that make projects go viral on X —
+    powered by <span class="hl-b">HiggsField AI</span>.
+  </p>
+
+  <div class="hero-btns">
+    <a href="#contact" class="btn btn-y">⚡ WORK WITH ME</a>
+    <a href="https://x.com/_Dripxel" target="_blank" class="btn btn-b">𝕏 @_DRIPXEL</a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="hs">
+      <span class="hs-v loading" id="followerCount">—</span>
+      <span class="hs-l">X Followers</span>
     </div>
-    <div class="hero-stats">
-      <div class="hst"><span class="hst-v">3.8K+</span><span class="hst-l">X Followers</span></div>
-      <div class="hst"><span class="hst-v">AI</span><span class="hst-l">Powered</span></div>
-      <div class="hst"><span class="hst-v">100%</span><span class="hst-l">Original</span></div>
+    <div class="hs">
+      <span class="hs-v">AI</span>
+      <span class="hs-l">Powered</span>
+    </div>
+    <div class="hs">
+      <span class="hs-v">100%</span>
+      <span class="hs-l">Original</span>
     </div>
   </div>
 </section>
@@ -225,12 +582,14 @@
     <span class="ti">HIGGSFIELD AI</span><span class="ti ts">◆</span>
     <span class="ti">AI VIDEO</span><span class="ti ts">◆</span>
     <span class="ti">WEB3 PROJECTS</span><span class="ti ts">◆</span>
+    <span class="ti">AUTOMATION</span><span class="ti ts">◆</span>
     <span class="ti">AI ADS</span><span class="ti ts">◆</span>
     <span class="ti">CRYPTO MARKETING</span><span class="ti ts">◆</span>
     <span class="ti">X CONTENT</span><span class="ti ts">◆</span>
     <span class="ti">HIGGSFIELD AI</span><span class="ti ts">◆</span>
     <span class="ti">AI VIDEO</span><span class="ti ts">◆</span>
     <span class="ti">WEB3 PROJECTS</span><span class="ti ts">◆</span>
+    <span class="ti">AUTOMATION</span><span class="ti ts">◆</span>
   </div>
 </div>
 
@@ -238,39 +597,107 @@
 <section class="section" id="services">
   <div class="eyebrow reveal">What I Do</div>
   <h2 class="stitle reveal">SERVICES</h2>
-  <p class="ssub reveal">Premium AI-driven content for crypto projects and Web3 builders who want to dominate on X.</p>
+  <p class="ssub reveal">Click any card for details. Premium AI-driven content for crypto projects and Web3 builders.</p>
+
   <div class="svc-grid reveal">
-    <div class="svc-card">
+
+    <div class="svc-card" onclick="toggleCard(this)">
       <span class="svc-n">01</span>
       <div class="svc-ico">🎯</div>
       <h3 class="svc-t">AI AD CREATION</h3>
-      <p class="svc-d">High-converting AI-generated ads built with HiggsField AI. Scroll-stopping visuals and compelling copy engineered to drive clicks and engagement.</p>
-      <div class="svc-tags"><span class="svc-tag">HiggsField AI</span><span class="svc-tag">AI Video</span><span class="svc-tag">Ad Copy</span></div>
+      <p class="svc-d">High-converting AI-generated ads built with HiggsField AI. Scroll-stopping visuals and compelling copy engineered to drive clicks.</p>
+      <div class="svc-tags">
+        <span class="svc-tag">HiggsField AI</span>
+        <span class="svc-tag">AI Video</span>
+        <span class="svc-tag">Ad Copy</span>
+      </div>
+      <div class="svc-expand">
+        <div class="svc-expand-inner">
+          <div class="expand-item">Custom AI-generated video ads tailored to your brand and target audience</div>
+          <div class="expand-item">Compelling ad copy optimized for X engagement and conversion</div>
+          <div class="expand-item">Multiple format variations — static, video, and animated content</div>
+          <div class="expand-item">Fast turnaround — most projects delivered within 24–48 hours</div>
+        </div>
+      </div>
+      <div class="svc-card-footer">
+        <span style="color:var(--text2);">DM to inquire →</span>
+        <span class="toggle-hint">DETAILS</span>
+      </div>
     </div>
-    <div class="svc-card">
+
+    <div class="svc-card" onclick="toggleCard(this)">
       <span class="svc-n">02</span>
       <div class="svc-ico">₿</div>
       <h3 class="svc-t">CRYPTO MARKETING</h3>
-      <p class="svc-d">Strategic marketing posts for crypto projects on X. Narratives that build hype, attract holders, and make your project impossible to ignore.</p>
-      <div class="svc-tags"><span class="svc-tag">X / Twitter</span><span class="svc-tag">Web3</span><span class="svc-tag">Launch Posts</span></div>
+      <p class="svc-d">Strategic marketing posts for crypto projects on X. Narratives that build hype, attract holders, and make your project trend.</p>
+      <div class="svc-tags">
+        <span class="svc-tag">X / Twitter</span>
+        <span class="svc-tag">Web3</span>
+        <span class="svc-tag">Launch Posts</span>
+      </div>
+      <div class="svc-expand">
+        <div class="svc-expand-inner">
+          <div class="expand-item">Launch announcement posts, thread creation, and project narratives</div>
+          <div class="expand-item">Community engagement content and holder update posts</div>
+          <div class="expand-item">Viral-optimized copy with crypto-native language and tone</div>
+          <div class="expand-item">Ongoing marketing packages available for long-term projects</div>
+        </div>
+      </div>
+      <div class="svc-card-footer">
+        <span style="color:var(--text2);">DM to inquire →</span>
+        <span class="toggle-hint">DETAILS</span>
+      </div>
     </div>
-    <div class="svc-card">
+
+    <div class="svc-card" onclick="toggleCard(this)">
       <span class="svc-n">03</span>
       <div class="svc-ico">🤖</div>
       <h3 class="svc-t">AI VIDEO CONTENT</h3>
       <p class="svc-d">Cutting-edge AI video creation for X. Short-form, eye-catching, engineered for maximum impressions in the crypto and AI niche.</p>
-      <div class="svc-tags"><span class="svc-tag">AI Video</span><span class="svc-tag">Short Form</span><span class="svc-tag">X Native</span></div>
+      <div class="svc-tags">
+        <span class="svc-tag">AI Video</span>
+        <span class="svc-tag">Short Form</span>
+        <span class="svc-tag">X Native</span>
+      </div>
+      <div class="svc-expand">
+        <div class="svc-expand-inner">
+          <div class="expand-item">AI-generated short videos optimized for X's algorithm and feed</div>
+          <div class="expand-item">Product showcases, explainer videos, and promotional reels</div>
+          <div class="expand-item">Built with HiggsField AI for cinematic, professional results</div>
+          <div class="expand-item">Delivered ready-to-post with captions and hashtag strategy</div>
+        </div>
+      </div>
+      <div class="svc-card-footer">
+        <span style="color:var(--text2);">DM to inquire →</span>
+        <span class="toggle-hint">DETAILS</span>
+      </div>
     </div>
+
+    <div class="svc-card svc-coming" style="cursor:default;">
+      <span class="svc-n" style="color:rgba(240,220,0,0.06);">04</span>
+      <div class="svc-ico" style="border-color:var(--border-y);background:var(--yellow-dim);">⚙️</div>
+      <h3 class="svc-t" id="comingSoonText" style="color:var(--yellow);letter-spacing:3px;">COMING SOON</h3>
+      <p class="svc-d">New services currently in development. Automation scripts, AI workflows, and more — stay tuned.</p>
+      <div class="svc-tags">
+        <span class="svc-tag" style="opacity:0.5;">Automation</span>
+        <span class="svc-tag" style="opacity:0.5;">AI Workflows</span>
+      </div>
+      <div class="svc-card-footer" style="margin-top:1rem;">
+        <span style="color:var(--text2);font-family:'Share Tech Mono',monospace;font-size:0.52rem;letter-spacing:2px;">IN DEVELOPMENT...</span>
+        <span style="color:var(--yellow);font-family:'Share Tech Mono',monospace;font-size:0.6rem;" id="csStatus">■ ■ ■</span>
+      </div>
+    </div>
+
   </div>
 </section>
 
 <!-- ABOUT -->
-<section class="section" id="about" style="background:var(--surface);">
+<section class="section sec-alt" id="about">
   <div class="about-grid">
-    <div class="reveal">
+    <div class="reveal d1">
       <div class="about-panel">
         <div class="a-handle">@_Dripxel</div>
-        <div class="a-stat">FOLLOWERS: <span>3,840</span> &nbsp;|&nbsp; PLATFORM: <span>X</span></div>
+        <div class="a-stat">FOLLOWERS: <span id="aboutFollowers">3,840</span> &nbsp;|&nbsp; PLATFORM: <span>X</span></div>
         <p class="a-bio">Daily content creator in the AI &amp; Crypto space. Posting AI ads, video content, and crypto posts every day on X — powered by HiggsField AI tools.</p>
         <div class="chips">
           <span class="chip cb">AI Content</span>
@@ -281,14 +708,14 @@
         </div>
       </div>
     </div>
-    <div class="reveal">
+    <div class="reveal d2">
       <div class="eyebrow">About</div>
-      <h2 class="stitle" style="margin-bottom:1.5rem;">I MAKE<br>CONTENT<br>THAT DRIPS.</h2>
-      <p style="color:var(--muted);font-size:0.95rem;line-height:1.8;margin-bottom:1.5rem;font-weight:500;">
+      <h2 class="stitle" style="margin-bottom:1.4rem;">I MAKE<br>CONTENT<br>THAT DRIPS.</h2>
+      <p style="color:var(--text2);font-size:0.93rem;line-height:1.8;margin-bottom:1.4rem;font-weight:500;">
         I'm <strong style="color:var(--text);">DRIPXEL</strong> — an AI content creator at the intersection of artificial intelligence and crypto. I use <strong style="color:var(--blue);">HiggsField AI</strong> to produce ads and videos that hit different.
       </p>
-      <p style="color:var(--muted);font-size:0.95rem;line-height:1.8;margin-bottom:2.5rem;font-weight:500;">
-        Whether you need a viral post for your crypto project launch or an AI-powered ad campaign, I deliver content with speed, creativity, and impact.
+      <p style="color:var(--text2);font-size:0.93rem;line-height:1.8;margin-bottom:2.2rem;font-weight:500;">
+        Whether you need a viral post for your crypto launch or an AI-powered ad campaign, I deliver speed, creativity, and impact.
       </p>
       <a href="https://x.com/_Dripxel" target="_blank" class="btn btn-y">𝕏 FOLLOW ON X</a>
     </div>
@@ -301,76 +728,73 @@
   <h2 class="stitle reveal">PROCESS</h2>
   <p class="ssub reveal">Simple, fast, results-driven.</p>
   <div class="proc-row reveal">
-    <div class="proc-step">
-      <div class="proc-dot"></div>
-      <span class="proc-n">// 01</span>
-      <div class="proc-t">BRIEF</div>
-      <p class="proc-d">Share project details and goals via X DMs.</p>
-    </div>
-    <div class="proc-step">
-      <div class="proc-dot"></div>
-      <span class="proc-n">// 02</span>
-      <div class="proc-t">CREATE</div>
-      <p class="proc-d">AI-powered content built with HiggsField AI.</p>
-    </div>
-    <div class="proc-step">
-      <div class="proc-dot"></div>
-      <span class="proc-n">// 03</span>
-      <div class="proc-t">REVIEW</div>
-      <p class="proc-d">Revisions included until you're satisfied.</p>
-    </div>
-    <div class="proc-step">
-      <div class="proc-dot"></div>
-      <span class="proc-n">// 04</span>
-      <div class="proc-t">LAUNCH</div>
-      <p class="proc-d">Go live on X. Watch impressions roll in.</p>
-    </div>
+    <div class="proc-step"><span class="proc-ico">💬</span><span class="proc-n">// 01</span><div class="proc-t">BRIEF</div><p class="proc-d">Share project details and goals via X DMs.</p></div>
+    <div class="proc-step"><span class="proc-ico">⚡</span><span class="proc-n">// 02</span><div class="proc-t">CREATE</div><p class="proc-d">AI-powered content built with HiggsField AI.</p></div>
+    <div class="proc-step"><span class="proc-ico">✅</span><span class="proc-n">// 03</span><div class="proc-t">REVIEW</div><p class="proc-d">Revisions included until you're satisfied.</p></div>
+    <div class="proc-step"><span class="proc-ico">🚀</span><span class="proc-n">// 04</span><div class="proc-t">LAUNCH</div><p class="proc-d">Go live on X. Watch impressions roll in.</p></div>
   </div>
 </section>
 
 <!-- POSTS -->
-<section class="section" id="posts" style="background:var(--surface);">
-  <div class="eyebrow reveal">Live From X</div>
+<section class="section sec-alt" id="posts">
+  <div class="eyebrow reveal">Content</div>
   <h2 class="stitle reveal">MY POSTS</h2>
-  <p class="ssub reveal">AI videos and crypto content — straight from my feed.</p>
+  <p class="ssub reveal">Featured AI videos — click to watch on X.</p>
 
-  <div class="reveal" style="margin-bottom:2.5rem;">
-    <p style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:3px;color:var(--blue);margin-bottom:1.5rem;text-align:center;">// FEATURED_AI_VIDEOS</p>
-    <div style="display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;">
-      <div style="border:1px solid rgba(0,212,255,0.18);max-width:340px;width:100%;background:var(--bg);">
-        <blockquote class="twitter-tweet" data-theme="dark" data-dnt="true">
-          <a href="https://x.com/_Dripxel/status/2045739351175578040"></a>
-        </blockquote>
-      </div>
-      <div style="border:1px solid rgba(245,230,66,0.18);max-width:340px;width:100%;background:var(--bg);">
-        <blockquote class="twitter-tweet" data-theme="dark" data-dnt="true">
-          <a href="https://x.com/_Dripxel/status/2046079709679947955"></a>
-        </blockquote>
-      </div>
-    </div>
+  <div class="posts-featured reveal">
+    <a href="https://x.com/_Dripxel/status/2045739351175578040" target="_blank" class="post-card">
+      <span class="post-tag">// AI_VIDEO_01</span>
+      <span class="post-ico">🎬</span>
+      <div class="post-t">AI VIDEO POST</div>
+      <div class="post-d">AI-powered video content created with HiggsField AI. High-impact visual storytelling built for X.</div>
+      <div class="post-link">𝕏 WATCH ON X →</div>
+    </a>
+    <a href="https://x.com/_Dripxel/status/2046079709679947955" target="_blank" class="post-card">
+      <span class="post-tag">// AI_VIDEO_02</span>
+      <span class="post-ico">⚡</span>
+      <div class="post-t">AI VIDEO POST</div>
+      <div class="post-d">Latest AI video from the crypto and AI niche. Scroll-stopping content engineered for impressions.</div>
+      <div class="post-link">𝕏 WATCH ON X →</div>
+    </a>
+    <a href="https://x.com/_Dripxel/status/2035592691011223763" target="_blank" class="post-card">
+      <span class="post-tag">// CRYPTO_POST_01</span>
+      <span class="post-ico">🪙</span>
+      <div class="post-t">CRYPTO PROJECT POST</div>
+      <div class="post-d">Strategic marketing post for a crypto project — hype-building content crafted to attract holders and drive engagement on X.</div>
+      <div class="post-link">𝕏 WATCH ON X →</div>
+    </a>
+    <a href="https://x.com/_Dripxel/status/2034879431479636327" target="_blank" class="post-card">
+      <span class="post-tag">// CRYPTO_POST_02</span>
+      <span class="post-ico">📈</span>
+      <div class="post-t">CRYPTO PROJECT POST</div>
+      <div class="post-d">Viral-optimized crypto marketing post engineered for maximum reach and community growth in the Web3 space.</div>
+      <div class="post-link">𝕏 WATCH ON X →</div>
+    </a>
   </div>
 
-  <p style="font-family:'Share Tech Mono',monospace;font-size:0.6rem;letter-spacing:3px;color:var(--muted);margin-bottom:1.2rem;text-align:center;" class="reveal">// LIVE_FEED</p>
-  <div class="reveal" style="display:flex;justify-content:center;">
-    <div style="width:100%;max-width:600px;border:1px solid rgba(0,212,255,0.13);background:var(--bg);">
-      <iframe src="https://syndication.twitter.com/srv/timeline-profile/screen-name/_Dripxel?dnt=true&theme=dark&chrome=noheader%20nofooter%20noborders%20transparent&tweetLimit=6"
-        width="100%" height="600" frameborder="0" scrolling="yes"
-        style="display:block;background:transparent;" title="@_Dripxel on X"></iframe>
-    </div>
+  <!-- Live Feed -->
+  <div class="live-feed-wrap reveal" style="max-width:600px;margin:0 auto;">
+    <iframe
+      src="https://syndication.twitter.com/srv/timeline-profile/screen-name/_Dripxel?dnt=true&theme=dark&chrome=noheader%20nofooter%20noborders%20transparent&tweetLimit=3"
+      width="100%" height="480" frameborder="0" scrolling="yes"
+      style="display:block;background:transparent;" title="@_Dripxel Live Feed">
+    </iframe>
   </div>
+
   <div style="text-align:center;margin-top:2rem;" class="reveal">
-    <a href="https://x.com/_Dripxel" target="_blank" class="btn btn-b">VIEW ALL POSTS ON X →</a>
+    <a href="https://x.com/_Dripxel" target="_blank" class="btn btn-b">VIEW ALL POSTS →</a>
   </div>
 </section>
 
 <!-- CTA -->
 <section class="cta-sec" id="contact">
+  <div class="cta-glow"></div>
   <div class="eyebrow reveal">Get In Touch</div>
-  <h2 class="stitle reveal" style="font-size:clamp(2.2rem,6vw,5rem);">READY TO<br><span style="color:var(--yellow);text-shadow:0 0 25px rgba(245,230,66,0.5);">GO VIRAL?</span></h2>
-  <p style="color:var(--muted);max-width:440px;margin:1rem auto 0;line-height:1.75;font-weight:500;" class="reveal">
+  <h2 class="stitle reveal" style="font-size:clamp(2rem,5.5vw,4.5rem);">READY TO<br><span style="color:var(--yellow);text-shadow:var(--glow-y);">GO VIRAL?</span></h2>
+  <p style="color:var(--text2);max-width:420px;margin:1rem auto 0;line-height:1.75;font-weight:500;" class="reveal">
     Drop a DM on X or send an email — let's build content that makes your project impossible to ignore.
   </p>
-  <div class="contact-cards reveal">
+  <div class="contact-row reveal">
     <a href="https://x.com/_Dripxel" target="_blank" class="cc">
       <span class="cc-icon">𝕏</span>
       <span class="cc-lbl">X / TWITTER</span>
@@ -382,8 +806,8 @@
       <span class="cc-val">0xdripxel@gmail.com</span>
     </a>
   </div>
-  <div style="margin-top:2.5rem;" class="reveal">
-    <a href="https://x.com/_Dripxel" target="_blank" class="btn btn-y" style="font-size:0.8rem;padding:15px 44px;">⚡ DM ON X NOW</a>
+  <div style="margin-top:2.2rem;" class="reveal">
+    <a href="https://x.com/_Dripxel" target="_blank" class="btn btn-y" style="padding:14px 42px;">⚡ DM ON X NOW</a>
   </div>
 </section>
 
@@ -394,14 +818,152 @@
   <a href="https://x.com/_Dripxel" target="_blank" class="f-x">𝕏 @_DRIPXEL</a>
 </footer>
 
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 <script>
-  const cur=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
-  let mx=0,my=0,rx=0,ry=0;
-  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
-  (function a(){rx+=(mx-rx)*0.1;ry+=(my-ry)*0.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(a);})();
-  const obs=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*70);});},{threshold:0.1});
-  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+/* ── CURSOR ── */
+const cur=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+(function a(){rx+=(mx-rx)*0.1;ry+=(my-ry)*0.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(a);})();
+
+/* ── SCROLL REVEAL ── */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*60);});
+},{threshold:0.08});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* ── THEME TOGGLE ── */
+function toggleTheme(){
+  const isLight=document.documentElement.dataset.theme==='light';
+  document.documentElement.dataset.theme=isLight?'dark':'light';
+  document.getElementById('themeIco').textContent=isLight?'☀️':'🌙';
+  document.getElementById('themeTxt').textContent=isLight?'LIGHT':'DARK';
+}
+
+/* ── MODAL ── */
+function openModal(){document.getElementById('modal').classList.add('show');}
+function closeModal(){document.getElementById('modal').classList.remove('show');}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+/* ── SERVICE CARD EXPAND ── */
+function toggleCard(card){
+  document.querySelectorAll('.svc-card.open').forEach(c=>{if(c!==card)c.classList.remove('open');});
+  card.classList.toggle('open');
+}
+
+/* ── PROFESSIONAL GLITCH ── */
+const glyphs = document.querySelectorAll('.glyph');
+const heroName = document.getElementById('heroName');
+const glitchChars = '█▓▒░$#@&%!?';
+
+function randomGlitch(){
+  // Full name scanbar glitch
+  heroName.classList.remove('do-glitch');
+  void heroName.offsetWidth;
+  heroName.classList.add('do-glitch');
+  setTimeout(()=>heroName.classList.remove('do-glitch'),350);
+
+  // 1–3 random individual letters
+  const count = Math.floor(Math.random()*2)+1;
+  const indices = [...Array(7).keys()].sort(()=>Math.random()-0.5).slice(0,count);
+  indices.forEach((idx,i)=>{
+    setTimeout(()=>{
+      const g = glyphs[idx];
+      const orig = g.dataset.l;
+      // Scramble briefly
+      let scrambleCount = 0;
+      const interval = setInterval(()=>{
+        g.textContent = glitchChars[Math.floor(Math.random()*glitchChars.length)];
+        scrambleCount++;
+        if(scrambleCount>=4){ clearInterval(interval); g.textContent=orig; }
+      },55);
+      // CSS animation
+      g.classList.add('glitch');
+      setTimeout(()=>g.classList.remove('glitch'),300);
+    }, i*80);
+  });
+
+  // Next trigger: 2–5 seconds
+  setTimeout(randomGlitch, 2000+Math.random()*3000);
+}
+setTimeout(randomGlitch, 1800);
+
+/* ── LIVE FOLLOWER COUNT ── */
+async function fetchFollowers(){
+  // Nitter public JSON (no API key needed)
+  const urls = [
+    'https://nitter.poast.org/_Dripxel/rss',
+    'https://nitter.privacyredirect.com/_Dripxel'
+  ];
+  try {
+    // Try fetching nitter profile page to scrape follower count
+    const res = await fetch('https://nitter.poast.org/_Dripxel', {mode:'cors'});
+    if(res.ok){
+      const html = await res.text();
+      const match = html.match(/(\d[\d,]+)\s*<\/span>\s*<span[^>]*>Followers/i) ||
+                    html.match(/Followers.*?(\d[\d,]+)/i);
+      if(match){
+        const count = match[1].replace(',','');
+        updateFollowers(parseInt(count));
+        return;
+      }
+    }
+  } catch(e){}
+  // Fallback: animate to known count
+  animateCount(3840);
+}
+
+function updateFollowers(count){
+  animateCount(count);
+  const el2 = document.getElementById('aboutFollowers');
+  if(el2) el2.textContent = count.toLocaleString();
+}
+
+function animateCount(target){
+  const el = document.getElementById('followerCount');
+  el.classList.remove('loading');
+  let current = Math.max(0, target - 200);
+  const step = Math.ceil((target-current)/40);
+  const timer = setInterval(()=>{
+    current = Math.min(current+step, target);
+    el.textContent = current >= 1000
+      ? (current/1000).toFixed(1).replace('.0','')+'K+'
+      : current.toString();
+    if(current >= target){ el.textContent = target >= 1000 ? (target/1000).toFixed(1).replace('.0','')+'K+' : target; clearInterval(timer); }
+  },40);
+}
+
+/* ── COMING SOON GLITCH ── */
+const csEl = document.getElementById('comingSoonText');
+const csOriginal = 'COMING SOON';
+const csChars = '█▓▒░$#@&%!?■□▪▫';
+const csStatus = document.getElementById('csStatus');
+
+function glitchComingSoon(){
+  let iter = 0;
+  const maxIter = 14;
+  const interval = setInterval(()=>{
+    csEl.textContent = csOriginal.split('').map((ch, i) => {
+      if(ch===' ') return ' ';
+      if(i < iter) return csOriginal[i];
+      return csChars[Math.floor(Math.random()*csChars.length)];
+    }).join('');
+    csEl.style.color = iter % 2 === 0 ? '#ff2d78' : '#00ffcc';
+    iter++;
+    if(iter > maxIter){
+      clearInterval(interval);
+      csEl.textContent = csOriginal;
+      csEl.style.color = 'var(--yellow)';
+    }
+  }, 55);
+  // Blink status dots
+  let d = 0;
+  const dots = ['■ □ □','□ ■ □','□ □ ■','■ ■ □','□ ■ ■','■ ■ ■'];
+  const dInt = setInterval(()=>{ csStatus.textContent=dots[d%dots.length]; d++; if(d>12)clearInterval(dInt); },120);
+  setTimeout(glitchComingSoon, 3000 + Math.random()*2500);
+}
+setTimeout(glitchComingSoon, 2500);
+
+fetchFollowers();
 </script>
 </body>
 </html>
